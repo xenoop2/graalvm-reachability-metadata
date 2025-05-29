@@ -82,6 +82,15 @@ steps:
       EOF
       ./gradlew --init-script init.gradle -p tests/tck-build-logic cyclonedxBom -info
       
+  # This step is optional for when you need to specify the name of your modules
+  - type: Command
+    name: "Detect the metadata components of the SBOMs"
+    command: |
+      yum install jq
+      for path in ./artifactSBOM.json ./tests/tck-build-logic/artifactSBOM.json; do
+         jq -r '.metadata.component.purl' "path" >> ${OCI_PRIMARY_SOURCE_DIR}/metadataComponentPurls.txt;
+      done
+      
   - type: Command
     name: "Merge multiple SBOMs using CycloneDX-cli"
     command: |
@@ -93,3 +102,7 @@ outputArtifacts:
   - name: artifactSBOM
     type: BINARY
     location: ${OCI_PRIMARY_SOURCE_DIR}/merged-bom.json
+  # This step is optional for when you need to specify the name of your modules
+  - name: metadataComponentPurls
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/metadataComponentPurls.txt
