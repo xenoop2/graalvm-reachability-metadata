@@ -11,9 +11,9 @@ env:
     "JAVA_HOME" : "/usr/lib64/graalvm/graalvm21-ee-java17"
 steps:
   - type: Command
-    name: "Installing the Oracle GraalVM 21 for JDK 17"
+    name: "Installing the Oracle GraalVM 21 for JDK 17, jqm and libicu"
     command: |
-      yum -y install graalvm21-ee-17-jdk
+      yum -y install graalvm21-ee-17-jdk jq libicu
   - type: Command
     name: "Setting the JAVA_PATH"
     command: |
@@ -22,7 +22,6 @@ steps:
     name: "Download CycloneDx-cli executable and install dependencies"
     command: |
       wget https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.24.2/cyclonedx-linux-x64
-      yum install -y libicu
   - type: Command
     name: "Run Gradle cyclonedxBom command"
     command: |
@@ -86,7 +85,6 @@ steps:
   - type: Command
     name: "Detect the metadata components of the SBOMs"
     command: |
-      yum install jq
       for path in ./artifactSBOM.json ./tests/tck-build-logic/artifactSBOM.json; do
          jq -r '.metadata.component.purl' "path" >> ${OCI_PRIMARY_SOURCE_DIR}/metadataComponentPurls.txt;
       done
