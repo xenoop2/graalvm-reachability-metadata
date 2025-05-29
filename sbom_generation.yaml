@@ -86,7 +86,7 @@ steps:
     name: "Detect the metadata components of the SBOMs"
     command: |
       for path in ./artifactSBOM.json ./tests/tck-build-logic/artifactSBOM.json; do
-         jq -r '.metadata.component.purl' "path" >> ${OCI_PRIMARY_SOURCE_DIR}/metadataComponentPurls.txt;
+         jq -r '.metadata.component.purl' "$path" >> ${OCI_PRIMARY_SOURCE_DIR}/metadataComponentPurls.txt;
       done
       
   - type: Command
